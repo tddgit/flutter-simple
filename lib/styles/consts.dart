@@ -10,3 +10,4 @@ const double pixelWidth2Columns = 1000;
 const double pixelWidth3Columns = 1300;
 
 const double twoSidedReorderScreen = 700;
+ 
