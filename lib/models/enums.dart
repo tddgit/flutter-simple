@@ -1,9 +1,4 @@
-enum MAIN_SCREEN {
-  settings,
-  conversion,
-  reorderProperties,
-  reorderUnits,
-}
+
 
 
 enum PROPERTY {

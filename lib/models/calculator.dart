@@ -32,7 +32,7 @@ class Calculator with ChangeNotifier {
     '÷': UNARY_OPERATION.division,
     '−': UNARY_OPERATION.subtraction,
   };
-  Map<BINARY_OPERATION, FuncUnaryOperation> unaryOperations = {
+  static final Map<BINARY_OPERATION, FuncUnaryOperation> unaryOperationsMap = {
     BINARY_OPERATION.squareRoot: (math.sqrt),
     BINARY_OPERATION.log10: (double x) => math.log(x) / math.log(10),
     BINARY_OPERATION.square: (double x) => x * x,
@@ -47,6 +47,19 @@ class Calculator with ChangeNotifier {
       return factorial(x);
     }
   };
+
+  void squareRoot() => _unaryOperation(
+      unaryOperationsMap[BINARY_OPERATION.squareRoot] as FuncUnaryOperation);
+  void log10() => _unaryOperation(
+      unaryOperationsMap[BINARY_OPERATION.log10] as FuncUnaryOperation);
+  void square() => _unaryOperation(
+      unaryOperationsMap[BINARY_OPERATION.square] as FuncUnaryOperation);
+  void ln() => _unaryOperation(
+      unaryOperationsMap[BINARY_OPERATION.ln] as FuncUnaryOperation);
+  void reciprocal() => _unaryOperation(
+      unaryOperationsMap[BINARY_OPERATION.reciprocal] as FuncUnaryOperation);
+  void factorial() => _unaryOperation(
+      unaryOperationsMap[BINARY_OPERATION.factorial] as FuncUnaryOperation);
 
   String currentNumber = '';
   double? _firstNumber;
@@ -100,13 +113,28 @@ class Calculator with ChangeNotifier {
     notifyListeners();
   }
 
-  void _deleteLastChar() {}
+  void _deleteLastChar() {
+    int length = currentNumber.length;
+    if (length > 0) {
+      currentNumber = currentNumber.substring(0, length - 1);
+    }
+    notifyListeners();
+  }
+
+  void _adaptiveDeleteOrClear() {
+    if (endNumber) {
+      _clearAll();
+    } else {
+      _deleteLastChar();
+    }
+  }
 
   void _unaryOperation(FuncUnaryOperation operation) {
     if (currentNumber.isNotEmpty) {
       currentNumber = _getStringFromDouble(
           operation(double.parse(currentNumber)), decimalSeparator);
     }
+    notifyListeners();
   }
 
   double _getDoubleFromString(String string) {
